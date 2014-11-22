@@ -36,7 +36,6 @@ public class Renderer implements CardboardView.StereoRenderer {
     private static final int COORDS_PER_VERTEX = 3;
 
     private static final float CAMERA_Z = 0.01f;
-    private static final float TIME_DELTA = 0.3f;
 
     private static final float YAW_LIMIT = 0.12f;
     private static final float PITCH_LIMIT = 0.12f;
@@ -126,10 +125,6 @@ public class Renderer implements CardboardView.StereoRenderer {
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-
-        // Build the Model part of the ModelView matrix.
-        Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
-
         // Build the camera matrix and apply it to the ModelView.
         Matrix.setLookAtM(mCamera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
@@ -146,26 +141,6 @@ public class Renderer implements CardboardView.StereoRenderer {
 
         // Apply the eye transformation to the camera.
         Matrix.multiplyMM(mView, 0, eyeTransform.getEyeView(), 0, mCamera, 0);
-
-        /*GLES20.glUseProgram(mGlPrograms[0]);
-
-        mPositionParam = GLES20.glGetAttribLocation(mGlPrograms[0], "vPosition");
-        mTextureCoordParam = GLES20.glGetAttribLocation(mGlPrograms[0], "vTexCoord");
-        mTextureParam = GLES20.glGetAttribLocation(mGlPrograms[0], "sTexture");
-
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextures[0]);
-        GLES20.glUniform1i(mTextureParam, 0);
-
-        GLES20.glVertexAttribPointer(mPositionParam, 2, GLES20.GL_FLOAT, false, 4*2, pVertex);
-        GLES20.glVertexAttribPointer(mTextureCoordParam, 2, GLES20.GL_FLOAT, false, 4*2, pTexCoord );
-        GLES20.glEnableVertexAttribArray(mPositionParam);
-        GLES20.glEnableVertexAttribArray(mTextureCoordParam);
-
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
-        GLES20.glFlush();
-
-        GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);*/
 
         GLES20.glUseProgram(mGlPrograms[1]);
 
@@ -381,6 +356,8 @@ public class Renderer implements CardboardView.StereoRenderer {
 
         //Start the preview
         mRealCamera.startPreview();
+        mRealCamera.setFaceDetectionListener(new DummyFaceDetectionListener());
+        mRealCamera.startFaceDetection();
     }
 
     /**

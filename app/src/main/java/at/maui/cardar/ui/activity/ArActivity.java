@@ -30,7 +30,6 @@ public class ArActivity extends CardboardActivity {
     private Renderer mRenderer;
 
     private Vibrator mVibrator;
-    private int mScore = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,7 @@ public class ArActivity extends CardboardActivity {
         // Inject views
         ButterKnife.inject(this);
 
-        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         // Associate a CardboardView.StereoRenderer with cardboardView.
         mRenderer = new Renderer(this);
@@ -51,6 +50,7 @@ public class ArActivity extends CardboardActivity {
         setCardboardView(cardboardView);
 
         overlayView.show3DToast("Welcome to CardAR.");
+
     }
 
     @Override
@@ -58,8 +58,7 @@ public class ArActivity extends CardboardActivity {
         Timber.i("onCardboardTrigger");
 
         if (mRenderer.isLookingAtObject()) {
-            mScore++;
-            overlayView.show3DToast("Found it! Look around for another one.\nScore = " + mScore);
+            overlayView.show3DToast("Found it! Look around for another one.");
             mRenderer.hideObject();
         } else {
             overlayView.show3DToast("Look around to find the object!");
